@@ -1,16 +1,74 @@
 // script.js
-
 document.addEventListener('DOMContentLoaded', () => {
     const musicTrigger = document.getElementById('backmusic');
     const audio = document.getElementById('bgMusic');
 
+    // 檢查瀏覽器是否記得「已經啟動過音樂」
+    if (sessionStorage.getItem('hasStartedMusic') === 'true') {
+        if (musicTrigger) musicTrigger.style.display = 'none'; // 直接隱藏，不要有動畫
+        // 嘗試播放（有些瀏覽器在換頁後仍需再次嘗試 play）
+        audio.play().catch(() => {
+            // 如果失敗，通常是因為新頁面也需要一次互動，這時可以讓遮罩再次出現
+            if (musicTrigger) musicTrigger.style.display = 'flex';
+        });
+    }
+
     if (musicTrigger && audio) {
         musicTrigger.addEventListener('click', () => {
-            audio.play().catch(e => console.log("播放失敗:", e));// 播放音樂
-            musicTrigger.classList.add('hidden');// 觸發 CSS 淡出效果
+            audio.play();
+            musicTrigger.classList.add('hidden');
+            
+            // 存入標記：記住使用者已經點過了
+            sessionStorage.setItem('hasStartedMusic', 'true');
         });
     }
 });
+document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    
+    // 如果點擊的是內部連結（非外部網站）
+    if (link && link.href.includes(window.location.origin)) {
+        e.preventDefault(); // 阻止瀏覽器跳轉
+        
+        const url = link.href;
+        loadPage(url); // 執行自定義載入函式
+    }
+});
+function loadPage(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // 1. 取得新頁面的 <main> 元素
+            const newMain = doc.getElementById('main-content');
+            // 2. 取得目前頁面的 <main> 元素
+            const currentMain = document.getElementById('main-content');
+
+            if (newMain && currentMain) {
+                // 【關鍵】將目前頁面的 Class 替換成新頁面的 Class
+                currentMain.className = newMain.className;
+                
+                // 【關鍵】替換內容
+                currentMain.innerHTML = newMain.innerHTML;
+                
+                // 更新網址與標題
+                history.pushState({ path: url }, '', url);
+                document.title = doc.title; 
+
+                // 重新初始化該頁面需要的 JS (如週期表或動畫)
+                reInitPageScripts();
+            }
+        })
+        .catch(err => console.error('換頁失敗:', err));
+}
+
+// 重新初始化函式：因為內容是動態換的，有些 JS 監聽器要重綁
+function reInitPageScripts() {
+    // 如果新頁面有週期表，就在這裡重新呼叫生成函數
+    // if (document.getElementById('periodicTable')) { ... }
+}
 // script.js 完整元素資料
 const elements = [
     // 第一週期
