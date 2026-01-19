@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>化學分子結構分析器</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <style>
+        body { font-family: sans-serif; margin: 20px; line-height: 1.6; background-color: #f4f4f9; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; }
+        textarea, input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; }
+        button { background-color: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #2980b9; }
+        #output { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 4px; white-space: pre-wrap; margin-top: 20px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>分子結構分析系統 (Python 版)</h2>
+    
+    <label>1. 輸入化學式 (格式如: (C)(1)(O)(2)):</label>
+    <input type="text" id="formula" placeholder="(C)(1)(O)(2)">
+    
+    <label>2. 輸入總電荷 (如 SO4 2- 輸入 -2):</label>
+    <input type="number" id="charge" value="0">
+    
+    <label>3. 輸入連接關係 (每行一對編號, 如 0 1):</label>
+    <textarea id="bonds" rows="4" placeholder="0 1&#10;0 2"></textarea>
+    
+    <button py-click="run_analysis">開始分析</button>
+
+    <div id="output">等待輸入中...</div>
+</div>
+
+<script type="py">
+from pyscript import document
+import re
+# 元素資料字典
+ELEMENT_DICT = {
+    "H":  {"name": "Hydrogen", "weight": 1.008, "mp": -259.1, "bp": -252.9, "en": 2.20, "ve": 1, "metal": False},
+    "He": {"name": "Helium", "weight": 4.003, "mp": -272.2, "bp": -268.9, "en": 0.00, "ve": 2, "metal": False},
+    "Li": {"name": "Lithium", "weight": 6.941, "mp": 180.5, "bp": 1342.0, "en": 0.98, "ve": 1, "metal": True},
+    "Be": {"name": "Beryllium", "weight": 9.012, "mp": 1287.0, "bp": 2471.0, "en": 1.57, "ve": 2, "metal": True},
+    "B":  {"name": "Boron", "weight": 10.811, "mp": 2075.0, "bp": 4000.0, "en": 2.04, "ve": 3, "metal": False},
+    "C":  {"name": "Carbon", "weight": 12.011, "mp": 3550.0, "bp": 4827.0, "en": 2.55, "ve": 4, "metal": False},
+    "N":  {"name": "Nitrogen", "weight": 14.007, "mp": -210.0, "bp": -195.8, "en": 3.04, "ve": 5, "metal": False},
+    "O":  {"name": "Oxygen", "weight": 15.999, "mp": -218.8, "bp": -183.0, "en": 3.44, "ve": 6, "metal": False},
+    "F":  {"name": "Fluorine", "weight": 18.998, "mp": -219.6, "bp": -188.1, "en": 3.98, "ve": 7, "metal": False},
+    "Ne": {"name": "Neon", "weight": 20.180, "mp": -248.6, "bp": -246.1, "en": 0.00, "ve": 8, "metal": False},
+    "Na": {"name": "Sodium", "weight": 22.990, "mp": 97.7, "bp": 883.0, "en": 0.93, "ve": 1, "metal": True},
+    "Mg": {"name": "Magnesium", "weight": 24.305, "mp": 650.0, "bp": 1090.0, "en": 1.31, "ve": 2, "metal": True},
+    "Al": {"name": "Aluminum", "weight": 26.982, "mp": 660.3, "bp": 2519.0, "en": 1.61, "ve": 3, "metal": True},
+    "Si": {"name": "Silicon", "weight": 28.085, "mp": 1414.0, "bp": 3265.0, "en": 1.90, "ve": 4, "metal": False},
+    "P":  {"name": "Phosphorus", "weight": 30.974, "mp": 44.1, "bp": 280.5, "en": 2.19, "ve": 5, "metal": False},
+    "S":  {"name": "Sulfur", "weight": 32.065, "mp": 115.2, "bp": 444.6, "en": 2.58, "ve": 6, "metal": False},
+    "Cl": {"name": "Chlorine", "weight": 35.453, "mp": -101.5, "bp": -34.0, "en": 3.16, "ve": 7, "metal": False},
+    "Ar": {"name": "Argon", "weight": 39.948, "mp": -189.3, "bp": -185.8, "en": 0.00, "ve": 8, "metal": False},
+    "K":  {"name": "Potassium", "weight": 39.098, "mp": 63.4, "bp": 759.0, "en": 0.82, "ve": 1, "metal": True},
+}
+def run_analysis(event):
+    output_div = document.querySelector("#output")
+    formula_str = document.querySelector("#formula").value
+    charge = int(document.querySelector("#charge").value or 0)
+    bonds_str = document.querySelector("#bonds").value
+    #解析分子
+    nodes = []
+    matches = re.findall(r"\(([A-Za-z]+)\)\((\d+)\)", formula_str)
+    if not matches:
+        output_div.innerText = "格式錯誤！請使用 (C)(1)(O)(2) 這種格式。"
+        return
+    for sym, count in matches:
+        if sym in ELEMENT_DICT:
+            for _ in range(int(count)):
+                nodes.append({"sym": sym, "rem_e": ELEMENT_DICT[sym]["ve"]})
+    total_atoms = len(nodes)
+    adj = [[0] * total_atoms for _ in range(total_atoms)]
+    #解析連接關係
+    lines = bonds_str.strip().split('\n')
+    for line in lines:
+        if not line.strip(): continue
+        try:
+            a, b = map(int, line.split())
+            if a < total_atoms and b < total_atoms:
+                adj[a][b] = 1
+                adj[b][a] = 1
+        except:
+            continue
+    #自動鍵結 
+    if total_atoms > 0:
+        nodes[0]["rem_e"] -= charge # 電荷放入中心原子
+        
+    # 扣除單鍵
+    for i in range(total_atoms):
+        for j in range(i + 1, total_atoms):
+            if adj[i][j] >= 1:
+                nodes[i]["rem_e"] -= 1
+                nodes[j]["rem_e"] -= 1
+    
+    # 嘗試多鍵
+    for i in range(total_atoms):
+        while nodes[i]["rem_e"] > 0:
+            added = False
+            for j in range(total_atoms):
+                if adj[i][j] >= 1 and nodes[j]["rem_e"] > 0:
+                    adj[i][j] += 1
+                    adj[j][i] += 1
+                    nodes[i]["rem_e"] -= 1
+                    nodes[j]["rem_e"] -= 1
+                    added = True
+                    break
+            if not added: break
+    #輸出分析結果
+    atom_list = [f"[{i}]{n['sym']}" for i, n in enumerate(nodes)]
+    res = f"原子清單: {' '.join(atom_list)}\n\n"
+    res += f"{'編號':<4} {'原子':<4} {'總鍵數':<6} {'分配':<10} {'LP':<4} {'形狀':<10}\n"
+    res += "-"*50 + "\n"
+    max_en, min_en = -1.0, 10.0
+    has_HB = False
+    for i in range(total_atoms):
+        sym = nodes[i]["sym"]
+        e_data = ELEMENT_DICT[sym]
+        if e_data["en"] > max_en: max_en = e_data["en"]
+        if 0 < e_data["en"] < min_en: min_en = e_data["en"]
+        b_sum, nbr, desc = 0, 0, ""
+        for j in range(total_atoms):
+            if adj[i][j] > 0:
+                b_sum += adj[i][j]
+                nbr += 1
+                desc += f"{adj[i][j]}-"
+                # 氫鍵判斷
+                if sym == "H" and ELEMENT_DICT[nodes[j]["sym"]]["sym"] in ["F", "O", "N"]:
+                    has_HB = True
+        lp = nodes[i]["rem_e"] // 2
+        sn = nbr + lp
+        # 形狀判斷
+        sh = "末端"
+        if sn == 4:
+            sh = "四面體" if lp == 0 else ("三角錐" if lp == 1 else "角形")
+        elif sn == 3:
+            sh = "平面三角" if lp == 0 else "角形"
+        elif sn == 2:
+            sh = "線性"
+        res += f"{i:<6} {sym:<6} {b_sum:<8} {desc:<11} {lp:<6} {sh}\n"
+    de = max_en - min_en
+    force = "倫敦分散力"
+    if has_HB: force = "氫鍵, " + force
+    if de > 0.5: force = "偶極-偶極, " + force
+    res += f"\n[作用力] 極性強度: {de:.2f} | 作用力: {force}"
+    output_div.innerText = res
+</script>
+</body>
+</html>
