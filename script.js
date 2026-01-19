@@ -23,17 +23,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
 document.addEventListener('click', (e) => {
     const link = e.target.closest('a');
     
-    // 如果點擊的是內部連結（非外部網站）
-    if (link && link.href.includes(window.location.origin)) {
+    // 修改判斷邏輯：確保同網域、非錨點、非新視窗才攔截
+    if (link && 
+        link.hostname === window.location.hostname && 
+        !link.hash && 
+        link.target !== "_blank") {
+        
         e.preventDefault(); // 阻止瀏覽器跳轉
         
         const url = link.href;
         loadPage(url); // 執行自定義載入函式
     }
 });
+
 function loadPage(url) {
     fetch(url)
         .then(response => response.text())
@@ -46,7 +52,8 @@ function loadPage(url) {
 
             if (newMain && currentMain) {
                 // 1. 處理 Header：如果是首頁則顯示，分頁則隱藏
-                if (url.includes('index.html') || url.endsWith('/')) {
+                // 增加對 /online1/index.html 的判斷
+                if (url.includes('index.html') || url.endsWith('/') || url.endsWith('online1/')) {
                     if (heroHeader) heroHeader.style.display = 'block';
                 } else {
                     if (heroHeader) heroHeader.style.display = 'none';
@@ -71,6 +78,7 @@ function loadPage(url) {
             window.location.href = url; // 失敗時的保險機制
         });
 }
+
 function initPeriodicTable() {
     const table = document.getElementById('periodicTable');
     const extraRows = document.getElementById('extraRows');
@@ -114,11 +122,20 @@ function initPeriodicTable() {
         window.onclick = (e) => { if (e.target == modal) modal.style.display = 'none'; };
     }
 }
+
 function reInitPageScripts() {
     console.log("執行換頁後的腳本初始化...");
     
     // 重新生成週期表
     initPeriodicTable();
+
+    // --- PyScript 支援區塊 ---
+    // 檢查新內容是否有 Python 腳本
+    const hasPyScript = document.querySelector('script[type="py"]');
+    if (hasPyScript && window.pyscript) {
+        console.log("偵測到 Python 分析器，PyScript 正在待命...");
+        // PyScript 2024.1.1 會監控 DOM 變動並嘗試初始化新組件
+    }
 
     // 重新綁定首頁卡片提示 (銻)
     const antimonyLink = document.querySelector('a[href="article-antimony.html"]');
@@ -129,11 +146,19 @@ function reInitPageScripts() {
         });
     }
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     reInitPageScripts(); // 初次進入首頁或週期表頁時執行一次
     
-    // 音樂控制 (如果 backmusic id 在 body 裡一直存在)
-    initMusicControl(); 
+    // 如果你有 initMusicControl 函式，請確保它已定義，否則會報錯
+    // 這裡我將它包裹在 try-catch 中以策安全
+    try {
+        if (typeof initMusicControl === 'function') {
+            initMusicControl();
+        }
+    } catch (e) {
+        console.log("音樂控制初始化提示:", e);
+    }
 });
 const elements = [
     // 第一週期
@@ -177,7 +202,7 @@ const elements = [
     history: "名稱來自德國地下怪物kobold，因常伴隨砷出產而含劇毒，。",
     usage: "用於製造藍色或具有磁性的合金，曾經鋰電池的正極",
     funFact: "鈷也在隕石中被發現過"
-},
+    },
     { num: 28, symbol: "Ni", name: "鎳", row: 4, col: 10 },
     { num: 29, symbol: "Cu", name: "銅", row: 4, col: 11 },
     { num: 30, symbol: "Zn", name: "鋅", row: 4, col: 12 },
