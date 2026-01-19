@@ -29,27 +29,27 @@
     <script type="py">
         from pyscript import document
         import re
-
+        #元素字典 
         ELEMENT_DICT = {
-            "H":  {"en": 2.20, "ve": 1}, 
-            "He": {"en": 0.00, "ve": 2},
-            "Li": {"en": 0.98, "ve": 1}, 
-            "Be": {"en": 1.57, "ve": 2},
-            "B":  {"en": 2.04, "ve": 3}, 
-            "C":  {"en": 2.55, "ve": 4},
-            "N":  {"en": 3.04, "ve": 5}, 
-            "O":  {"en": 3.44, "ve": 6},
-            "F":  {"en": 3.98, "ve": 7}, 
-            "Ne": {"en": 0.00, "ve": 8},
-            "Na": {"en": 0.93, "ve": 1}, 
-            "Mg": {"en": 1.31, "ve": 2},
-            "Al": {"en": 1.61, "ve": 3}, 
-            "Si": {"en": 1.90, "ve": 4},
-            "P":  {"en": 2.19, "ve": 5}, 
-            "S":  {"en": 2.58, "ve": 6},
-            "Cl": {"en": 3.16, "ve": 7}, 
-            "Ar": {"en": 0.00, "ve": 8},
-            "K":  {"en": 0.82, "ve": 1}
+            "H":  {"name": "Hydrogen", "weight": 1.008, "mp": -259.1, "bp": -252.9, "en": 2.20, "ve": 1, "metal": False},
+            "He": {"name": "Helium", "weight": 4.003, "mp": -272.2, "bp": -268.9, "en": 0.00, "ve": 2, "metal": False},
+            "Li": {"name": "Lithium", "weight": 6.941, "mp": 180.5, "bp": 1342.0, "en": 0.98, "ve": 1, "metal": True},
+            "Be": {"name": "Beryllium", "weight": 9.012, "mp": 1287.0, "bp": 2471.0, "en": 1.57, "ve": 2, "metal": True},
+            "B":  {"name": "Boron", "weight": 10.811, "mp": 2075.0, "bp": 4000.0, "en": 2.04, "ve": 3, "metal": False},
+            "C":  {"name": "Carbon", "weight": 12.011, "mp": 3550.0, "bp": 4827.0, "en": 2.55, "ve": 4, "metal": False},
+            "N":  {"name": "Nitrogen", "weight": 14.007, "mp": -210.0, "bp": -195.8, "en": 3.04, "ve": 5, "metal": False},
+            "O":  {"name": "Oxygen", "weight": 15.999, "mp": -218.8, "bp": -183.0, "en": 3.44, "ve": 6, "metal": False},
+            "F":  {"name": "Fluorine", "weight": 18.998, "mp": -219.6, "bp": -188.1, "en": 3.98, "ve": 7, "metal": False},
+            "Ne": {"name": "Neon", "weight": 20.180, "mp": -248.6, "bp": -246.1, "en": 0.00, "ve": 8, "metal": False},
+            "Na": {"name": "Sodium", "weight": 22.990, "mp": 97.7, "bp": 883.0, "en": 0.93, "ve": 1, "metal": True},
+            "Mg": {"name": "Magnesium", "weight": 24.305, "mp": 650.0, "bp": 1090.0, "en": 1.31, "ve": 2, "metal": True},
+            "Al": {"name": "Aluminum", "weight": 26.982, "mp": 660.3, "bp": 2519.0, "en": 1.61, "ve": 3, "metal": True},
+            "Si": {"name": "Silicon", "weight": 28.085, "mp": 1414.0, "bp": 3265.0, "en": 1.90, "ve": 4, "metal": False},
+            "P":  {"name": "Phosphorus", "weight": 30.974, "mp": 44.1, "bp": 280.5, "en": 2.19, "ve": 5, "metal": False},
+            "S":  {"name": "Sulfur", "weight": 32.065, "mp": 115.2, "bp": 444.6, "en": 2.58, "ve": 6, "metal": False},
+            "Cl": {"name": "Chlorine", "weight": 35.453, "mp": -101.5, "bp": -34.0, "en": 3.16, "ve": 7, "metal": False},
+            "Ar": {"name": "Argon", "weight": 39.948, "mp": -189.3, "bp": -185.8, "en": 0.00, "ve": 8, "metal": False},
+            "K":  {"name": "Potassium", "weight": 39.098, "mp": 63.4, "bp": 759.0, "en": 0.82, "ve": 1, "metal": True},
         }
         def parse_formula():
             formula_str = document.querySelector("#formula").value
@@ -57,7 +57,7 @@
             matches = re.findall(r"\(([A-Za-z]+)\)\((\d+)\)", formula_str)
             for sym, count in matches:
                 if sym in ELEMENT_DICT:
-                    for _ in range(int(count)):
+                    for _ in range(int(count))
                         nodes.append({"sym": sym, "rem_e": ELEMENT_DICT[sym]["ve"]})
             return nodes
         def generate_ids(event):
@@ -68,7 +68,7 @@
                 return
             hints = [f"[{i}]:{n['sym']}" for i, n in enumerate(nodes)]
             hint_div.innerText = "原子編號： " + "  ".join(hints)
-            document.querySelector("#bonds").placeholder = f"若編號 0 與 1 有連接，請在此輸入：0 1"
+            document.querySelector("#bonds").placeholder = "若編號 0 與 1 有連接，請在此輸入：0 1"
         def run_analysis(event):
             output_div = document.querySelector("#output")
             nodes = parse_formula()
@@ -79,20 +79,25 @@
             bonds_str = document.querySelector("#bonds").value
             total_atoms = len(nodes)
             adj = [[0] * total_atoms for _ in range(total_atoms)]
+            #解析連接關係
             for line in bonds_str.strip().split('\n'):
                 try:
                     parts = line.split()
                     if len(parts) == 2:
                         a, b = map(int, parts)
                         if a < total_atoms and b < total_atoms:
-                            adj[a][b] = adj[b][a] = 1
+                            adj[a][b] = adj[b][a] = 1   
                 except: continue
-            nodes[0]["rem_e"] -= charge 
+            #自動鍵結邏輯 
+            if total_atoms > 0:
+                nodes[0]["rem_e"] -= charge # 將電荷放入中心原子
+            # 計算全單鍵
             for i in range(total_atoms):
                 for j in range(i + 1, total_atoms):
                     if adj[i][j] >= 1:
                         nodes[i]["rem_e"] -= 1
                         nodes[j]["rem_e"] -= 1
+            # 嘗試多鍵分配
             for i in range(total_atoms):
                 while nodes[i]["rem_e"] > 0:
                     added = False
@@ -105,28 +110,44 @@
                             added = True
                             break
                     if not added: break
-            res = f"{'編號':<6} {'原子':<6} {'總鍵數':<8} {'LP':<6} {'形狀':<12}\n"
-            res += "="*45 + "\n"
+            res = f"{'編號':<6} {'原子':<6} {'總鍵數':<8} {'鍵級分配':<12} {'LP':<6} {'空間形狀':<12}\n"
+            res += "="*60 + "\n"
             max_en, min_en, has_HB = -1.0, 10.0, False
             for i in range(total_atoms):
                 sym = nodes[i]["sym"]
                 e_data = ELEMENT_DICT[sym]
-                max_en = max(max_en, e_data["en"])
-                if e_data["en"] > 0: min_en = min(min_en, e_data["en"])
-                b_sum, nbr = 0, 0
+                # 統計電負度
+                if e_data["en"] > max_en: max_en = e_data["en"]
+                if e_data["en"] > 0 and e_data["en"] < min_en: min_en = e_data["en"]
+                b_sum, nbr, desc = 0, 0, ""
                 for j in range(total_atoms):
                     if adj[i][j] > 0:
-                        b_sum += adj[i][j]
+                        bond_order = adj[i][j]
+                        b_sum += bond_order
                         nbr += 1
-                        if sym == "H" and nodes[j]["sym"] in ["F", "O", "N"]: has_HB = True
+                        desc += f"{bond_order}-" 
+                        neighbor_sym = nodes[j]["sym"]
+                        if sym == "H" and (neighbor_sym in ["F", "O", "N"]):
+                            has_HB = True
                 lp = max(0, nodes[i]["rem_e"] // 2)
                 sn = nbr + lp
                 sh = "末端"
-                if sn == 4: sh = "四面體" if lp == 0 else ("三角錐" if lp == 1 else "角形")
-                elif sn == 3: sh = "平面三角" if lp == 0 else "角形"
-                elif sn == 2: sh = "線性"
-                res += f"{i:<8} {sym:<8} {b_sum:<10} {lp:<8} {sh}\n"
-            output_div.innerText = res + f"\n[分析報告]\n極性強度: {max_en - min_en:.2f}\n氫鍵可能: {'有' if has_HB else '無'}"
+                if sn == 4:
+                    sh = "四面體" if lp == 0 else ("三角錐" if lp == 1 else "角形")
+                elif sn == 3:
+                    sh = "平面三角" if lp == 0 else "角形"
+                elif sn == 2:
+                    sh = "線性"
+                res += f"{i:<8} {sym:<8} {b_sum:<10} {desc:<14} {lp:<8} {sh}\n"
+            #作用力判斷邏輯
+            de = max_en - min_en
+            force_list = ["倫敦分散力"]
+            if has_HB: force_list.insert(0, "氫鍵")
+            if de > 0.5: force_list.insert(0, "偶極-偶極力")
+            report = f"\n[分析報告]\n"
+            report += f"極性強度 (ΔEN): {de:.2f}\n"
+            report += f"主要作用力: {', '.join(force_list)}\n"
+            output_div.innerText = res + report
         def reset_all(event):
             document.querySelector("#formula").value = ""
             document.querySelector("#charge").value = "0"
