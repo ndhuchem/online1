@@ -2,45 +2,29 @@
 document.addEventListener('DOMContentLoaded', () => {
     const musicTrigger = document.getElementById('backmusic');
     const audio = document.getElementById('bgMusic');
-
-    // 檢查瀏覽器是否記得「已經啟動過音樂」
-    if (sessionStorage.getItem('hasStartedMusic') === 'true') {
+    if (sessionStorage.getItem('hasStartedMusic') === 'true') {// 檢查瀏覽器是否已啟動櫻樂
         if (musicTrigger) musicTrigger.style.display = 'none'; // 直接隱藏，不要有動畫
-        // 嘗試播放（有些瀏覽器在換頁後仍需再次嘗試 play）
-        audio.play().catch(() => {
-            // 如果失敗，通常是因為新頁面也需要一次互動，這時可以讓遮罩再次出現
-            if (musicTrigger) musicTrigger.style.display = 'flex';
+        audio.play().catch(() => {// 嘗試播放
+            if (musicTrigger) musicTrigger.style.display = 'flex';// 如果失敗，通常是因為新頁面也需要一次互動，這時可以讓遮罩再次出現
         });
     }
-
-    if (musicTrigger && audio) {
-        musicTrigger.addEventListener('click', () => {
-            audio.play();
-            musicTrigger.classList.add('hidden');
-            
-            // 存入標記：記住使用者已經點過了
-            sessionStorage.setItem('hasStartedMusic', 'true');
+    if (musicTrigger && audio) {//兩個函式同時為ture觸發
+        musicTrigger.addEventListener('click', () => {//確認點擊
+            audio.play();//音樂播放
+            musicTrigger.classList.add('hidden');//隱藏此函式
+            sessionStorage.setItem('hasStartedMusic', 'true');//標記使用者點過了
         });
     }
 });
-
-document.addEventListener('click', (e) => {
+document.addEventListener('click', (e) => {//確認點擊函式
     const link = e.target.closest('a');
-    
-    // 修改判斷邏輯：確保同網域、非錨點、非新視窗才攔截
-    if (link && 
-        link.hostname === window.location.hostname && 
-        !link.hash && 
-        link.target !== "_blank") {
-        
+    if (link && link.hostname === window.location.hostname && !link.hash && link.target !== "_blank") {//確保同網域、非錨點、非新視窗才攔截
         e.preventDefault(); // 阻止瀏覽器跳轉
-        
         const url = link.href;
         loadPage(url); // 執行自定義載入函式
     }
 });
-
-function loadPage(url) {
+function loadPage(url) {//自定義網頁載入函式
     fetch(url)
         .then(response => response.text())
         .then(html => {
@@ -49,27 +33,19 @@ function loadPage(url) {
             const newMain = doc.getElementById('main-content');
             const currentMain = document.getElementById('main-content');
             const heroHeader = document.querySelector('.hero'); // 抓取首頁大標頭
-
             if (newMain && currentMain) {
-                // 1. 處理 Header：如果是首頁則顯示，分頁則隱藏
+                // 處理 Header首頁顯示分頁隱藏
                 // 增加對 /online1/index.html 的判斷
                 if (url.includes('index.html') || url.endsWith('/') || url.endsWith('online1/')) {
                     if (heroHeader) heroHeader.style.display = 'block';
                 } else {
                     if (heroHeader) heroHeader.style.display = 'none';
                 }
-
-                // 2. 替換內容
-                currentMain.className = newMain.className;
+                currentMain.className = newMain.className;// 替換main內容
                 currentMain.innerHTML = newMain.innerHTML;
-
-                // 3. 更新 URL 與 標題
-                history.pushState({ path: url }, '', url);
+                history.pushState({ path: url }, '', url);// 更新URL與標題
                 document.title = doc.title;
-
-                // 4. 重要：延遲執行腳本初始化
-                setTimeout(reInitPageScripts, 50);
-
+                setTimeout(reInitPageScripts, 50);// 延遲執行腳本初始化(預留載入時間50ms)
                 window.scrollTo(0, 0);
             }
         })
@@ -79,23 +55,18 @@ function loadPage(url) {
         });
 }
 
-function initPeriodicTable() {
+function initPeriodicTable() {//週期表生成函式
     const table = document.getElementById('periodicTable');
     const extraRows = document.getElementById('extraRows');
     const modal = document.getElementById('elementModal');
-
     if (!table) return; // 如果這頁沒週期表，就不跑
-
     console.log("偵測到週期表容器，開始渲染...");
     table.innerHTML = ''; // 清空舊的，避免重複生成
     if (extraRows) extraRows.innerHTML = '';
-
     elements.forEach(el => {
         const box = document.createElement('div');
         box.className = 'element-box';
-        
-        // 設定網格位置
-        if (el.row > 7) {
+        if (el.row > 7) {// 設定網格位置
             box.style.gridRow = el.row - 8; 
             box.style.gridColumn = el.col;
             if (extraRows) extraRows.appendChild(box);
@@ -104,40 +75,28 @@ function initPeriodicTable() {
             box.style.gridColumn = el.col;
             if (table) table.appendChild(box);
         }
-
         box.innerHTML = `
             <div class="element-number">${el.num}</div>
             <div class="element-symbol">${el.symbol}</div>
             <div class="element-name">${el.name}</div>
         `;
-        
-        // 點擊事件
-        box.onclick = () => showModal(el);
+        box.onclick = () => showModal(el);// 當點擊呼叫框框
     });
-
-    // 重新綁定關閉按鈕事件 (因為彈窗可能也是剛換進來的)
-    const closeBtn = document.querySelector('.close-button');
+    const closeBtn = document.querySelector('.close-button');// 重新綁定關閉按鈕事件 (因為彈窗可能也是剛換進來的)
     if (closeBtn && modal) {
         closeBtn.onclick = () => modal.style.display = 'none';
         window.onclick = (e) => { if (e.target == modal) modal.style.display = 'none'; };
     }
 }
-
 function reInitPageScripts() {
     console.log("執行換頁後的腳本初始化...");
-    
-    // 重新生成週期表
-    initPeriodicTable();
-
+    initPeriodicTable();// 重新生成週期表
     // --- PyScript 支援區塊 ---
-    // 檢查新內容是否有 Python 腳本
-    const hasPyScript = document.querySelector('script[type="py"]');
+    const hasPyScript = document.querySelector('script[type="py"]');// 檢查新內容是否有 Python 腳本
     if (hasPyScript && window.pyscript) {
         console.log("偵測到 Python 分析器，PyScript 正在待命...");
-        // PyScript 2024.1.1 會監控 DOM 變動並嘗試初始化新組件
     }
-
-    // 重新綁定首頁卡片提示 (銻)
+    // 重新綁定首頁卡片提示
     const antimonyLink = document.querySelector('a[href="article-antimony.html"]');
     if (antimonyLink) {
         const antimonyCard = antimonyLink.parentElement;
@@ -146,12 +105,8 @@ function reInitPageScripts() {
         });
     }
 }
-
 document.addEventListener('DOMContentLoaded', () => {
-    reInitPageScripts(); // 初次進入首頁或週期表頁時執行一次
-    
-    // 如果你有 initMusicControl 函式，請確保它已定義，否則會報錯
-    // 這裡我將它包裹在 try-catch 中以策安全
+    reInitPageScripts(); // 初次進入首頁或週期表頁時執行一次腳本初始化
     try {
         if (typeof initMusicControl === 'function') {
             initMusicControl();
@@ -160,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("音樂控制初始化提示:", e);
     }
 });
-const elements = [
+const elements = [//週期表表格位置與彈窗訊息
     // 第一週期
     { num: 1, symbol: "H", name: "氫", row: 1, col: 1 },
     { num: 2, symbol: "He", name: "氦", row: 1, col: 18 },
@@ -308,8 +263,7 @@ const elements = [
     { num: 117, symbol: "Ts", name: "鿬", row: 7, col: 17 },
     { num: 118, symbol: "Og", name: "鿫", row: 7, col: 18 }
 ];
-
-// --- 4. 彈窗 function (放在全域) ---
+// 彈窗函式
 function showModal(el) {
     const modal = document.getElementById('elementModal');
     if (!modal) return;
@@ -322,7 +276,6 @@ function showModal(el) {
         ${el.usage ? `<strong>用途：</strong>${el.usage}<br>` : ''}
         ${el.funFact ? `<i style="color: #7f8c8d;">冷知識：${el.funFact}</i>` : ''}
     `;
-    
     const linkContainer = document.getElementById('modalLinkContainer');
     linkContainer.innerHTML = ''; 
     if (el.link) {
