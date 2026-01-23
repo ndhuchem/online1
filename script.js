@@ -2,29 +2,32 @@
 document.addEventListener('DOMContentLoaded', () => {
     const musicTrigger = document.getElementById('backmusic');
     const audio = document.getElementById('bgMusic');
-    if (sessionStorage.getItem('hasStartedMusic') === 'true') {// 檢查瀏覽器是否已啟動櫻樂
+    // 檢查瀏覽器是否已啟動音樂
+    if (sessionStorage.getItem('hasStartedMusic') === 'true') {
         if (musicTrigger) musicTrigger.style.display = 'none'; // 直接隱藏，不要有動畫
-        audio.play().catch(() => {// 嘗試播放
-            if (musicTrigger) musicTrigger.style.display = 'flex';// 如果失敗，通常是因為新頁面也需要一次互動，這時可以讓遮罩再次出現
+        audio.play().catch(() => { // 嘗試播放
+            // 如果失敗，通常是因為新頁面也需要一次互動，這時可以讓遮罩再次出現
+            if (musicTrigger) musicTrigger.style.display = 'flex';
         });
     }
-    if (musicTrigger && audio) {//兩個函式同時為ture觸發
-        musicTrigger.addEventListener('click', () => {//確認點擊
-            audio.play();//音樂播放
-            musicTrigger.classList.add('hidden');//隱藏此函式
-            sessionStorage.setItem('hasStartedMusic', 'true');//標記使用者點過了
+    if (musicTrigger && audio) { // 兩個函式同時為true觸發
+        musicTrigger.addEventListener('click', () => { // 確認點擊
+            audio.play(); // 音樂播放
+            musicTrigger.classList.add('hidden'); // 隱藏此函式
+            sessionStorage.setItem('hasStartedMusic', 'true'); // 標記使用者點過了
         });
     }
 });
-document.addEventListener('click', (e) => {//確認點擊函式
+document.addEventListener('click', (e) => { // 確認點擊函式
     const link = e.target.closest('a');
-    if (link && link.hostname === window.location.hostname && !link.hash && link.target !== "_blank") {//確保同網域、非錨點、非新視窗才攔截
+    // 確保同網域、非錨點、非新視窗才攔截
+    if (link && link.hostname === window.location.hostname && !link.hash && link.target !== "_blank") {
         e.preventDefault(); // 阻止瀏覽器跳轉
         const url = link.href;
         loadPage(url); // 執行自定義載入函式
     }
 });
-function loadPage(url) {//自定義網頁載入函式
+function loadPage(url) { // 自定義網頁載入函式
     fetch(url)
         .then(response => response.text())
         .then(html => {
@@ -41,11 +44,11 @@ function loadPage(url) {//自定義網頁載入函式
                 } else {
                     if (heroHeader) heroHeader.style.display = 'none';
                 }
-                currentMain.className = newMain.className;// 替換main內容
+                currentMain.className = newMain.className; // 替換main內容
                 currentMain.innerHTML = newMain.innerHTML;
-                history.pushState({ path: url }, '', url);// 更新URL與標題
+                history.pushState({ path: url }, '', url); // 更新URL與標題
                 document.title = doc.title;
-                setTimeout(reInitPageScripts, 50);// 延遲執行腳本初始化(預留載入時間50ms)
+                setTimeout(reInitPageScripts, 50); // 延遲執行腳本初始化(預留載入時間50ms)
                 window.scrollTo(0, 0);
             }
         })
@@ -54,19 +57,58 @@ function loadPage(url) {//自定義網頁載入函式
             window.location.href = url; // 失敗時的保險機制
         });
 }
-
-function initPeriodicTable() {//週期表生成函式
+function initPeriodicTable() { // 週期表生成函式
     const table = document.getElementById('periodicTable');
     const extraRows = document.getElementById('extraRows');
     const modal = document.getElementById('elementModal');
+    // 獲取目前的顯示模式 (由 HTML 的 select 決定)
+    const modeSelect = document.getElementById('viewMode');
+    const mode = modeSelect ? modeSelect.value : 'standard';
     if (!table) return; // 如果這頁沒週期表，就不跑
-    console.log("偵測到週期表容器，開始渲染...");
+    console.log(`偵測到週期表容器，模式：${mode}，開始渲染...`);
     table.innerHTML = ''; // 清空舊的，避免重複生成
     if (extraRows) extraRows.innerHTML = '';
     elements.forEach(el => {
         const box = document.createElement('div');
         box.className = 'element-box';
-        if (el.row > 7) {// 設定網格位置
+        // --- 根據顯示模式決定樣式與顯示內容 ---
+        let displayText = el.name; // 預設顯示中文名稱
+        let bgColor = '';
+        let bgImg = '';
+        if (mode === 'standard') {
+            box.classList.add(el.category); // 套用元素性質分類顏色 (如 nonmetal)
+            // 標準模式下顯示原子圖片
+            if (el.image) {
+                bgImg = `linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('${el.image}')`;
+            }
+        } 
+        else if (mode === 'electronegativity') {
+            displayText = el.electronegativity || 'N/A';
+            // 電負度越高顏色越深 (以橘紅色系為基礎)
+            const alpha = el.electronegativity ? (el.electronegativity / 4.5) : 0.1;
+            bgColor = `rgba(255, 87, 34, ${alpha})`;
+        } 
+        else if (mode === 'flame') {
+            // 如果資料中有焰色，則強化邊框與陰影
+            if (el.flame && el.flame !== 'none') {
+                box.style.boxShadow = `inset 0 0 15px ${el.flame}`;
+                box.style.borderColor = el.flame;
+            }
+        } 
+        else if (mode === 'year') {
+            displayText = el.year <= 0 ? '古代' : el.year;
+            // 越近代發現的元素顏色越淺，古代最深
+            const brightness = el.year <= 0 ? 80 : Math.max(30, 100 - (2026 - el.year) / 10);
+            bgColor = `hsl(200, 70%, ${brightness}%)`;
+        }
+        // 套用動態計算的樣式
+        if (bgColor) box.style.backgroundColor = bgColor;
+        if (bgImg) {
+            box.style.backgroundImage = bgImg;
+            box.style.backgroundSize = 'cover';
+        }
+        // 設定網格位置
+        if (el.row > 7) {
             box.style.gridRow = el.row - 8; 
             box.style.gridColumn = el.col;
             if (extraRows) extraRows.appendChild(box);
@@ -78,11 +120,11 @@ function initPeriodicTable() {//週期表生成函式
         box.innerHTML = `
             <div class="element-number">${el.num}</div>
             <div class="element-symbol">${el.symbol}</div>
-            <div class="element-name">${el.name}</div>
+            <div class="element-name" style="font-size: 0.7rem;">${displayText}</div>
         `;
-        box.onclick = () => showModal(el);// 當點擊呼叫框框
+        box.onclick = () => showModal(el); // 當點擊呼叫框框
     });
-    const closeBtn = document.querySelector('.close-button');// 重新綁定關閉按鈕事件 (因為彈窗可能也是剛換進來的)
+    const closeBtn = document.querySelector('.close-button'); // 重新綁定關閉按鈕事件
     if (closeBtn && modal) {
         closeBtn.onclick = () => modal.style.display = 'none';
         window.onclick = (e) => { if (e.target == modal) modal.style.display = 'none'; };
@@ -90,9 +132,9 @@ function initPeriodicTable() {//週期表生成函式
 }
 function reInitPageScripts() {
     console.log("執行換頁後的腳本初始化...");
-    initPeriodicTable();// 重新生成週期表
+    initPeriodicTable(); // 重新生成週期表
     // --- PyScript 支援區塊 ---
-    const hasPyScript = document.querySelector('script[type="py"]');// 檢查新內容是否有 Python 腳本
+    const hasPyScript = document.querySelector('script[type="py"]'); // 檢查新內容是否有 Python 腳本
     if (hasPyScript && window.pyscript) {
         console.log("偵測到 Python 分析器，PyScript 正在待命...");
     }

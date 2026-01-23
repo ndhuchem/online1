@@ -364,6 +364,59 @@ body {
     position: relative;
     animation: slideDown 0.3s ease-out; /* 增加彈出動畫 */
 }
+/* 基礎格子樣式 */
+.element-box {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background-color: #fff;
+    position: relative;
+    overflow: hidden; /* 確保背景圖片不會超出邊框 */
+}
+/* 懸停效果：稍微放大並加深陰影 */
+.element-box:hover {
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+/* --- 分類色彩定義 --- */
+/* 非金屬系列 */
+.nonmetal { background-color: #a0ffa0; border-color: #70cf70; }
+.noble-gas { background-color: #c0ffff; border-color: #8ce0e0; }
+/* 金屬系列 */
+.alkali-metal { background-color: #ff6666; border-color: #d44; color: #fff; } 
+.alkaline-earth-metal { background-color: #ffdead; border-color: #e6b88a; }
+.transition-metal { background-color: #ffc0c0; border-color: #f4a4a4; }  
+.post-transition-metal { background-color: #cccccc; border-color: #999; }  
+/* 類金屬 */
+.metalloid { background-color: #cccc99; border-color: #a3a375; }  
+/* 特殊系列 (下方長條區) */
+.lanthanide { background-color: #ffbffb; border-color: #f0a0f0; }
+.actinide { background-color: #ff99cc; border-color: #f080b0; }
+/* 通用金屬 (如果單純標記為 metal) */
+.metal { background-color: #e8e8e8; border-color: #bbb; }
+/* 讓選單容器有一點空間感 */
+.mode-selector {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: inline-block; /* 讓背景只包圍文字與選單 */
+    margin: 20px auto;
+}
+#viewMode {
+    border: 1.5px solid #1a73e8;
+    color: #1a73e8;
+    font-weight: bold;
+    outline: none;
+}
+#viewMode:focus {
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
+}
+
 @keyframes slideDown {
     from { transform: translateY(-20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
