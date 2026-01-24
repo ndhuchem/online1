@@ -70,13 +70,13 @@ function initPeriodicTable() { // 週期表生成函式
     table.style.backgroundPosition = "center";
     table.style.backgroundRepeat = "no-repeat";
     if (mode === 'standard') {
-        table.style.backgroundImage = "url('imgs/standard_bg.jpg')";
+        table.style.backgroundImage = "url('../imgs/standard_bg.jpg')";
     } else if (mode === 'electronegativity') {
-        table.style.backgroundImage = "url('imgs/electronegativity_bg.jpg')";
+        table.style.backgroundImage = "url('../imgs/electronegativity_bg.jpg')";
     } else if (mode === 'flame') {
-        table.style.backgroundImage = "url('imgs/flame_bg.jpg')";
+        table.style.backgroundImage = "url('../imgs/flame_bg.jpg')";
     } else if (mode === 'year') {
-        table.style.backgroundImage = "url('imgs/year_bg.jpg')";
+        table.style.backgroundImage = "url('../imgs/year_bg.jpg')";
     }
     table.innerHTML = '';
     if (extraRows) extraRows.innerHTML = '';
