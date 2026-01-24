@@ -71,6 +71,10 @@ function initPeriodicTable() { // 週期表生成函式
     elements.forEach(el => {
         const box = document.createElement('div');
         box.className = 'element-box';
+        box.style.backgroundColor = "";
+        box.style.boxShadow = "";
+        box.style.borderColor = "";
+        box.style.color = "";
         // --- 根據顯示模式決定樣式與顯示內容 ---
         let displayText = el.name; // 預設顯示中文名稱
         let bgColor = '';
@@ -89,17 +93,41 @@ function initPeriodicTable() { // 週期表生成函式
             bgColor = `rgba(255, 87, 34, ${alpha})`;
         } 
         else if (mode === 'flame') {
-            // 如果資料中有焰色，則強化邊框與陰影
+            // 進入焰色模式時，統一背景色為深色，讓發光更明顯
+            bgColor = "#222"; 
+            box.style.color = "#fff"; // 字體改成白色才看得到
+
             if (el.flame && el.flame !== 'none') {
-                box.style.boxShadow = `inset 0 0 15px ${el.flame}`;
+                // 設定發光效果與邊框
+                box.style.boxShadow = `0 0 20px ${el.flame}, inset 0 0 10px ${el.flame}`;
                 box.style.borderColor = el.flame;
+                box.style.borderWidth = "2px";
+            } else {
+                box.style.opacity = "0.3"; // 沒有焰色的元素變透明，突出有顏色的
             }
         } 
         else if (mode === 'year') {
-            displayText = el.year <= 0 ? '古代' : el.year;
-            // 越近代發現的元素顏色越淺，古代最深
-            const brightness = el.year <= 0 ? 80 : Math.max(30, 100 - (2026 - el.year) / 10);
-            bgColor = `hsl(200, 70%, ${brightness}%)`;
+            if (el.year <= 0) {
+                displayText = "古代";
+                bgColor = "#5D4037"; // 深咖啡色 (泥土與原始)
+                box.style.color = "#fff";
+            } else if (el.year > 0 && el.year <= 1600) {
+                displayText = "鍊金術";
+                bgColor = "#8B4513"; // 鞍褐色 (古老羊皮紙感)
+                box.style.color = "#fff";
+            } else if (el.year > 1600 && el.year <= 1800) {
+                displayText = "啟蒙時代";
+                bgColor = "#D4AF37"; // 經典金色 (化學黎明)
+                box.style.color = "#000";
+            } else if (el.year > 1800 && el.year <= 1900) {
+                displayText = "工業革命";
+                bgColor = "#708090"; // 鉛灰色 (鋼鐵與工廠)
+                box.style.color = "#fff";
+            } else {
+                displayText = el.year + "年";
+                bgColor = "#E0E0E0"; // 亮銀色 (現代科技)
+                box.style.color = "#000";
+            }
         }
         // 套用動態計算的樣式
         if (bgColor) box.style.backgroundColor = bgColor;
