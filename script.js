@@ -129,29 +129,32 @@ function initPeriodicTable() { // 週期表生成函式
             let yearDisplay = el.year <= 0 ? "" : `<br><span style="font-size: 0.6rem; opacity: 0.8;">(${el.year})</span>`;
             if (el.year <= 0) {
                 displayText = "西元前";
-                bgColor = "#5D4037"; 
+                bgColor = "rgba(93, 64, 55, 0.7)"; 
                 box.style.color = "#fff";
             } else if (el.year > 0 && el.year <= 1661) {
                 displayText = "早期鍊金"+ yearDisplay;
-                bgColor = "#D4AF37"; 
+                bgColor = "rgba(212, 175, 55, 0.7)"; 
                 box.style.color = "#fff";
             } else if (el.year > 1661 && el.year <= 1801) {
                 displayText = `<span style="font-size: 0.58rem; letter-spacing: -1px; white-space: nowrap;">練金與啟蒙</span>` + yearDisplay;
-                bgColor = "#f08436ff"; 
+                bgColor = "rgba(240, 132, 54, 0.7)"; 
                 box.style.color = "#000";
             } else if (el.year > 1801 && el.year <= 1869) {
                 displayText = "工業革命"+ yearDisplay;
-                bgColor = "#708090"; 
+                bgColor = "rgba(112, 128, 144, 0.7)"; 
                 box.style.color = "#fff";
             } else if (el.year > 1869 && el.year <= 1927) {
                 displayText = "週期尋覓"+ yearDisplay;
-                bgColor = "#65e463ff"; 
+                bgColor = "rgba(97, 238, 95, 0.7)"; 
                 box.style.color = "#fff";
             } else {
                 displayText ="量子化學"+ yearDisplay ;
-                bgColor = "#E0E0E0"; 
+                bgColor = "rgba(224, 224, 224, 0.7)"; 
                 box.style.color = "#000";
             }
+            box.style.backdropFilter = "blur(4px)";
+            box.style.webkitBackdropFilter = "blur(4px)"; // 相容性
+            box.style.border = "1px solid rgba(255,255,255,0.1)";
         }
         // 套用動態計算的樣式
         if (bgColor) box.style.backgroundColor = bgColor;
