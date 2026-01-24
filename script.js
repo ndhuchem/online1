@@ -100,10 +100,15 @@ function initPeriodicTable() { // 週期表生成函式
         } 
         else if (mode === 'electronegativity') {
             displayText = el.electronegativity || 'N/A';
-            // 電負度越高顏色越深 (以橘紅色系為基礎)
-            const alpha = el.electronegativity ? (el.electronegativity / 4.5) : 0.1;
-            bgColor = `rgba(255, 87, 34, ${alpha})`;
-        } 
+            if (el.electronegativity) {
+                const lightness = 95 - (el.electronegativity * 15); 
+                bgColor = `hsl(15, 90%, ${Math.max(30, lightness)}%)`; 
+                box.style.color = lightness < 50 ? "#fff" : "#000"; 
+            } else {
+                bgColor = "#eee"; // 沒資料的顯示灰色
+                box.style.color = "#999";
+            }
+        }
         else if (mode === 'flame') {
             // 進入焰色模式時，統一背景為深色
             bgColor = "#332f2fff"; 
