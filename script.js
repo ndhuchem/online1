@@ -80,7 +80,7 @@ function initPeriodicTable() { // 週期表生成函式
         let bgColor = '';
         let bgImg = '';
         if (mode === 'standard') {
-            box.classList.add(el.category); // 套用元素性質分類顏色 (如 nonmetal)
+            box.classList.add(el.category); // 套用元素性質分類顏色
             // 標準模式下顯示原子圖片
             if (el.image) {
                 bgImg = `linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('${el.image}')`;
@@ -93,17 +93,19 @@ function initPeriodicTable() { // 週期表生成函式
             bgColor = `rgba(255, 87, 34, ${alpha})`;
         } 
         else if (mode === 'flame') {
-            // 進入焰色模式時，統一背景色為深色，讓發光更明顯
+            // 進入焰色模式時，統一背景為深色
             bgColor = "#222"; 
-            box.style.color = "#fff"; // 字體改成白色才看得到
-
+            box.style.color = "#ffffff"; // 字體改成白色
             if (el.flame && el.flame !== 'none') {
                 // 設定發光效果與邊框
                 box.style.boxShadow = `0 0 20px ${el.flame}, inset 0 0 10px ${el.flame}`;
                 box.style.borderColor = el.flame;
                 box.style.borderWidth = "2px";
+                box.style.textShadow = `0 0 5px ${el.flame}, 0 0 10px ${el.flame}`;
+                box.style.fontWeight = "bold";  
             } else {
-                box.style.opacity = "0.3"; // 沒有焰色的元素變透明，突出有顏色的
+                box.style.opacity = "0.3"; // 沒有焰色的元素變透明
+                box.style.textShadow = "none";
             }
         } 
         else if (mode === 'year') {
