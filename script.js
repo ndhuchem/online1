@@ -111,7 +111,7 @@ function initPeriodicTable() { // 週期表生成函式
         else if (mode === 'year') {
             let yearDisplay = el.year <= 0 ? "" : `<br><span style="font-size: 0.6rem; opacity: 0.8;">(${el.year})</span>`;
             if (el.year <= 0) {
-                displayText = "古代"+ yearDisplay;
+                displayText = "西元前";
                 bgColor = "#5D4037"; 
                 box.style.color = "#fff";
             } else if (el.year > 0 && el.year <= 1661) {
@@ -159,6 +159,45 @@ function initPeriodicTable() { // 週期表生成函式
         `;
         box.onclick = () => showModal(el); // 當點擊呼叫框框
     });
+    const legend = document.getElementById('tableLegend');
+    if (legend) {
+        legend.innerHTML = ''; // 清空舊圖例
+
+        if (mode === 'standard') {
+            const categories = [
+                { name: '鹼金屬', color: '#ff6666' },
+                { name: '鹼土金屬', color: '#ffdead' },
+                { name: '過渡金屬', color: '#ffc0c0' },
+                { name: '類金屬', color: '#cccc99' },
+                { name: '非金屬', color: '#a0ffa0' },
+                { name: '惰性氣體', color: '#c0ffff' }
+            ];
+            categories.forEach(cat => {
+                legend.innerHTML += `
+                    <div class="legend-item">
+                        <div class="legend-color" style="background:${cat.color}"></div>
+                        <span>${cat.name}</span>
+                    </div>`;
+            });
+        } 
+        else if (mode === 'year') {
+            const eras = [
+                { name: '西元前', color: '#5D4037' },
+                { name: '早期鍊金', color: '#D4AF37' },
+                { name: '鍊金啟蒙', color: '#f08436' },
+                { name: '工業革命', color: '#708090' },
+                { name: '週期尋覓', color: '#65e463' },
+                { name: '量子化學', color: '#E0E0E0' }
+            ];
+            eras.forEach(era => {
+                legend.innerHTML += `
+                    <div class="legend-item">
+                        <div class="legend-color" style="background:${era.color}"></div>
+                        <span>${era.name}</span>
+                    </div>`;
+            });
+        }
+    }
     const closeBtn = document.querySelector('.close-button'); // 重新綁定關閉按鈕事件
     if (closeBtn && modal) {
         closeBtn.onclick = () => modal.style.display = 'none';

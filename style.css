@@ -382,6 +382,37 @@ body {
     z-index: 10;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
+/*週期表圖例*/
+.periodic-table-container {
+    position: relative;/* 確保容器寬度足夠 */
+}
+.table-legend {
+    position: absolute;
+    top: 50px;       /* 距離頂部 */
+    left: 20%;       /* 避開第一族的氫 */
+    width: 60%;      /* 佔據中間大部分空間 */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    pointer-events: none; /* 防止遮擋點擊事件 */
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    margin: 2px 8px;
+}
+.legend-color {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    margin-right: 5px;
+    border: 1px solid #999;
+}
 /* --- 分類色彩定義 --- */
 /* 非金屬系列 */
 .nonmetal { background-color: #a0ffa0; border-color: #70cf70; }

@@ -8,7 +8,6 @@
 </head>
 <body>
     <main id="main-content" class="article-page container">
-        <h1 style="text-align: center; margin-top: 30px;">互動式週期表</h1>
         <div class="mode-selector" style="margin: 20px auto; text-align: center;">
             <label for="viewMode" style="font-weight: bold; margin-right: 10px;">切換視圖：</label>
             <select id="viewMode" onchange="initPeriodicTable()" style="padding: 5px 15px; border-radius: 5px; cursor: pointer;">
@@ -19,9 +18,12 @@
             </select>
         </div>
         <section class="periodic-table-container">
+            <div id="tableLegend" class="table-legend"></div>
             <div class="periodic-table" id="periodicTable"></div>
             <div class="lanthanides-actinides" id="extraRows"></div>
         </section>
+        <section class="article-section">
+            </section>
         <article>
             <h1 class="article-title">互動式週期表：探索元素的世界</h1>
             <p class="article-meta">更新於 2026年1月1日 by 東華大學 喵鴿</p>
