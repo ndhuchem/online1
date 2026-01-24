@@ -101,7 +101,7 @@ function initPeriodicTable() { // 週期表生成函式
                 box.style.boxShadow = `0 0 20px ${el.flame}, inset 0 0 10px ${el.flame}`;
                 box.style.borderColor = el.flame;
                 box.style.borderWidth = "2px";
-                box.style.textShadow = `0 0 5px ${el.flame}, 0 0 10px ${el.flame}`;
+                box.style.textShadow = `0 0 5px ${el.flame}, 0 0 15px ${el.flame}`;
                 box.style.fontWeight = "bold";  
             } else {
                 box.style.opacity = "0.3"; // 沒有焰色的元素變透明
@@ -111,7 +111,7 @@ function initPeriodicTable() { // 週期表生成函式
         else if (mode === 'year') {
             let yearDisplay = el.year <= 0 ? "" : `<br><span style="font-size: 0.6rem; opacity: 0.8;">(${el.year})</span>`;
             if (el.year <= 0) {
-                displayText = "古代";
+                displayText = "古代"+ yearDisplay;
                 bgColor = "#5D4037"; 
                 box.style.color = "#fff";
             } else if (el.year > 0 && el.year <= 1661) {
