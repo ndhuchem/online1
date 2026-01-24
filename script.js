@@ -70,6 +70,16 @@ function initPeriodicTable() { // 週期表生成函式
     table.style.backgroundPosition = "center";
     table.style.backgroundRepeat = "no-repeat";
     table.innerHTML = ''; // 清空舊的，避免重複生成
+    if (mode === 'standard') {
+        table.style.backgroundImage = "url('imgs/standard_bg.jpg')";
+    } else if (mode === 'electronegativity') {
+        table.style.backgroundImage = "url('imgs/electronegativity_bg.jpg')";
+    } else if (mode === 'flame') {
+        table.style.backgroundImage = "url('imgs/flame_bg.jpg')";
+    } else if (mode === 'year') {
+        table.style.backgroundImage = "url('imgs/year_bg.jpg')";
+    }
+    table.innerHTML = '';
     if (extraRows) extraRows.innerHTML = '';
     elements.forEach(el => {
         const box = document.createElement('div');
@@ -83,7 +93,6 @@ function initPeriodicTable() { // 週期表生成函式
         let bgColor = '';
         let bgImg = '';
         if (mode === 'standard') {
-            table.style.backgroundImage = "url('images/standard_bg.jpg')";
             box.classList.add(el.category); // 套用元素性質分類顏色
             // 標準模式下顯示原子圖片
             if (el.image) {
@@ -91,14 +100,12 @@ function initPeriodicTable() { // 週期表生成函式
             }
         } 
         else if (mode === 'electronegativity') {
-            table.style.backgroundImage = "url('images/electronegativity_bg.jpg')";
             displayText = el.electronegativity || 'N/A';
             // 電負度越高顏色越深 (以橘紅色系為基礎)
             const alpha = el.electronegativity ? (el.electronegativity / 4.5) : 0.1;
             bgColor = `rgba(255, 87, 34, ${alpha})`;
         } 
         else if (mode === 'flame') {
-            table.style.backgroundImage = "url('images/flame_bg.jpg')";
             // 進入焰色模式時，統一背景為深色
             bgColor = "#332f2fff"; 
             box.style.color = "#ffffff"; // 字體改成白色
@@ -115,7 +122,6 @@ function initPeriodicTable() { // 週期表生成函式
             }
         } 
         else if (mode === 'year') {
-            table.style.backgroundImage = "url('images/year_bg.jpg')";
             let yearDisplay = el.year <= 0 ? "" : `<br><span style="font-size: 0.6rem; opacity: 0.8;">(${el.year})</span>`;
             if (el.year <= 0) {
                 displayText = "西元前";

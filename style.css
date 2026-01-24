@@ -456,6 +456,10 @@ body {
 #viewMode:focus {
     box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
 }
+#periodicTable {
+    padding: 15px;
+    transition: background-image 0.5s ease; /* 讓換背景圖時有淡入淡出的感覺 */
+}
 
 @keyframes slideDown {
     from { transform: translateY(-20px); opacity: 0; }
