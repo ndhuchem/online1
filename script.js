@@ -119,7 +119,7 @@ function initPeriodicTable() { // 週期表生成函式
                 bgColor = "#D4AF37"; 
                 box.style.color = "#fff";
             } else if (el.year > 1661 && el.year <= 1801) {
-                displayText = `<span style="font-size: 0.58rem; letter-spacing: -1px; white-space: nowrap; display: block;">練金與啟蒙</span>` + yearDisplay;
+                displayText = `<span style="font-size: 0.58rem; letter-spacing: -1px; white-space: nowrap;">練金與啟蒙</span>` + yearDisplay;
                 bgColor = "#f08436ff"; 
                 box.style.color = "#000";
             } else if (el.year > 1801 && el.year <= 1869) {
