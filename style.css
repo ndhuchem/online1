@@ -390,30 +390,33 @@ body {
 }
 .table-legend {
     position: absolute;
-    top: 50px;       /* 距離頂部 */
-    left: 20%;       /* 避開第一族的氫 */
-    width: 60%;      /* 佔據中間大部分空間 */
+    top: 10px;/* 週期表高度微調 */
+    left: 12%;/* 避開氫元素 */
+    width: auto;/* 讓寬度隨內容自動撐開 */
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.5);
+    flex-direction: column; 
+    align-items: flex-start; /* 靠左對齊 */
+    gap: 3px;/* 每一行之間的間距 */
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.8); /* 稍微增加不透明度 */
     border-radius: 8px;
-    pointer-events: none; /* 防止遮擋點擊事件 */
+    border: 1px solid #ddd;
+    pointer-events: none;
+    z-index: 5;/* 確保在格子上方 */
 }
 .legend-item {
     display: flex;
     align-items: center;
-    font-size: 0.8rem;
-    margin: 2px 8px;
+    font-size: 0.85rem;
+    white-space: nowrap;/* 確保年份文字不會被擠壓換行 */
 }
 .legend-color {
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
     border-radius: 3px;
-    margin-right: 5px;
-    border: 1px solid #999;
+    margin-right: 10px; /* 增加色塊與文字的距離 */
+    border: 1px solid #666;
+    flex-shrink: 0;/* 防止色塊被壓縮 */
 }
 /* --- 分類色彩定義 --- */
 /* 非金屬系列 */

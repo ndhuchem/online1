@@ -182,12 +182,12 @@ function initPeriodicTable() { // 週期表生成函式
         } 
         else if (mode === 'year') {
             const eras = [
-                { name: '西元前', color: '#5D4037' },
-                { name: '早期鍊金', color: '#D4AF37' },
-                { name: '鍊金與啟蒙', color: '#f08436' },
-                { name: '工業革命', color: '#708090' },
-                { name: '週期尋覓', color: '#65e463' },
-                { name: '量子化學', color: '#E0E0E0' }
+                { name: '西元前 BC~0', color: '#5D4037' },
+                { name: '早期鍊金  0~1661 CE', color: '#D4AF37' },
+                { name: '鍊金與啟蒙  1661 CE ~1801 CE', color: '#f08436' },
+                { name: '工業革命  1801 CE ~1869 CE', color: '#708090' },
+                { name: '週期尋覓  1829 CE ~1927 CE', color: '#65e463' },
+                { name: '量子化學  1927 CE ~', color: '#E0E0E0' }
             ];
             eras.forEach(era => {
                 legend.innerHTML += `
