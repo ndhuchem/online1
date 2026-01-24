@@ -6,6 +6,9 @@ body {
     color: #333;
     background-color: #f8fbfd; /* 輕微的背景色 */
 }
+* {
+    box-sizing: border-box;
+}
 /*音樂*/
 .music-overlay {
     position: fixed;
@@ -332,15 +335,15 @@ body {
 .lanthanides-actinides {
     margin-top: 30px;
     display: grid;
-    grid-template-columns: repeat(18, minmax(40px, 1fr)); /* 維持 18 欄與主表對齊 */
+    grid-template-columns: repeat(18, minmax(40px, 1fr)); 
     gap: 5px;
     min-width: 800px;
-}   
-.lanthanides-actinides .element-box {
-    grid-column: span 1; /* 預設佔一格 */
+    width: 100%;
 }
-.lanthanides-actinides .element-box:nth-child(15n+1) {
-    grid-column-start: 4;
+/* 修正偏移的邏輯 */
+.lanthanides-actinides .element-box:first-child,
+.lanthanides-actinides .element-box:nth-child(16) { 
+    grid-column-start: 4; 
 }
 /* 彈窗樣式*/
 .modal {
