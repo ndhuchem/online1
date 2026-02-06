@@ -47,11 +47,11 @@ body {
 
 /* 全站共用 */
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 20px;
 }
-/* 導航欄 */
+/* 最上方那一欄 */
 .navbar {
     background: #2c3e50; /* 深海藍 */
     color: white;
