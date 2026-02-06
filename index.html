@@ -24,8 +24,25 @@
                 <li><a href="#contact">聯絡我們</a></li>
                 <li><a href="/online1/chem.html">分子結構查詢(實驗中)</a></li>
             </ul>
+            <div class="menu-btn" onclick="toggleDrawer()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
         </div>
     </nav>
+    <div id="sideDrawer" class="drawer">
+        <div class="drawer-header">
+            <span>快速選單</span>
+            <button class="close-btn" onclick="toggleDrawer()">&times;</button>
+        </div>
+        <ul class="drawer-links">
+            <li><a href="/online1/index.html" onclick="toggleDrawer()">首頁</a></li>
+            <li><a href="/online1/card/article-periodic-table" onclick="toggleDrawer()">週期表</a></li>
+            <li><a href="#about" onclick="toggleDrawer()">關於我們</a></li>
+            <li><a href="/online1/chem.html" onclick="toggleDrawer()">分子結構查詢</a></li>
+        </ul>
+    </div>
     <header class="hero">
         <div class="container">
             <h1>化學視界 Chemistry Vision</h1>

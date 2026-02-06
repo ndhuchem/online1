@@ -241,6 +241,20 @@ function reInitPageScripts() {
         });
     }
 }
+function toggleDrawer() {
+    const drawer = document.getElementById('sideDrawer');
+    const overlay = document.getElementById('drawerOverlay');
+    
+    drawer.classList.toggle('active');
+    overlay.classList.toggle('active');
+
+    // 防止抽屜開啟時背景還能捲動
+    if (drawer.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = 'auto';
+    }
+}
 document.addEventListener('DOMContentLoaded', () => {
     reInitPageScripts(); // 初次進入首頁或週期表頁時執行一次腳本初始化
     try {
