@@ -30,11 +30,10 @@ document.addEventListener('click', (e) => { // 確認點擊函式
 function toggleDrawer() {
     const drawer = document.getElementById('sideDrawer');
     const overlay = document.getElementById('drawerOverlay');
-    
-    // 同時切換 drawer 和 overlay 的 active 類名
+    const menuBtn = document.querySelector('.menu-btn'); // 抓取按鈕
     drawer.classList.toggle('active');
     overlay.classList.toggle('active');
-
+    menuBtn.classList.toggle('open');
     // 開啟時禁止頁面捲動，關閉時恢復
     if (drawer.classList.contains('active')) {
         document.body.style.overflow = 'hidden';

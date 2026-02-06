@@ -52,7 +52,6 @@ body {
     padding: 0 20px;
 }
 /* 最上方那一欄 */
-/* --- 原有 Navbar 樣式修復 --- */
 .navbar {
     background: #2c3e50;
     color: white;
@@ -90,19 +89,22 @@ body {
 .navbar .nav-links a:hover { color: #f39c12; }
 /* --- 漢堡按鈕樣式 --- */
 .menu-btn {
-    display: none; /* 電腦版隱藏 */
+    display: none; 
     flex-direction: column;
     justify-content: space-between;
-    width: 30px;
+    width: 28px;
     height: 20px;
     cursor: pointer;
+    z-index: 2100; /* 確保在抽屜上方 */
+    transition: all 0.3s ease;
+    border: 2px solid red; /* 測試用：加一個紅框，讓我們能看到它在哪 */
 }
 .menu-btn .bar {
     height: 3px;
     width: 100%;
     background-color: white;
     border-radius: 2px;
-    transition: 0.3s;
+    transition: all 0.3s ease; 
 }
 /* --- 側邊抽屜樣式 (修正卡在下方的關鍵) --- */
 .drawer {
@@ -161,6 +163,15 @@ body {
 @media (max-width: 900px) {
     .navbar .nav-links { display: none; } /* 隱藏原本橫向選單 */
     .menu-btn { display: flex; } /* 顯示漢堡按鈕 */
+}
+.menu-btn.open .bar:nth-child(1) {
+    transform: translateY(8.5px) rotate(45deg);
+}
+.menu-btn.open .bar:nth-child(2) {
+    opacity: 0; /* 中間那條消失 */
+}
+.menu-btn.open .bar:nth-child(3) {
+    transform: translateY(-8.5px) rotate(-45deg);
 }
 /* 導航欄 */
 /* Hero Section (首頁大灰欄) */
