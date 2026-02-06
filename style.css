@@ -52,16 +52,23 @@ body {
     padding: 0 20px;
 }
 /* 最上方那一欄 */
+/* --- 原有 Navbar 樣式修復 --- */
 .navbar {
-    background: #2c3e50; /* 深海藍 */
+    background: #2c3e50;
     color: white;
     padding: 1rem 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    position: sticky; /* 讓導航欄固定在頂端 */
+    top: 0;
+    z-index: 1000;
 }
 .navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 .navbar .logo {
     color: white;
@@ -71,21 +78,89 @@ body {
 }
 .navbar .nav-links {
     list-style: none;
-    margin: 0;
-    padding: 0;
     display: flex;
 }
-.navbar .nav-links li {
-    margin-left: 25px;
-}
+.navbar .nav-links li { margin-left: 25px; }
 .navbar .nav-links a {
     color: white;
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s;
+    transition: 0.3s;
 }
-.navbar .nav-links a:hover {
-    color: #f39c12; /* 橘色亮點 */
+.navbar .nav-links a:hover { color: #f39c12; }
+/* --- 漢堡按鈕樣式 --- */
+.menu-btn {
+    display: none; /* 電腦版隱藏 */
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    cursor: pointer;
+}
+.menu-btn .bar {
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    border-radius: 2px;
+    transition: 0.3s;
+}
+/* --- 側邊抽屜樣式 (修正卡在下方的關鍵) --- */
+.drawer {
+    position: fixed; /* 固定在視窗上 */
+    top: 0;
+    right: -320px; /* 初始位置在畫面外 */
+    width: 300px;
+    height: 100vh; /* 撐滿全高 */
+    background-color: #2c3e50;
+    z-index: 2001; /* 確保在最上層 */
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* 平滑滑動 */
+    padding: 30px 20px;
+    box-sizing: border-box;
+}
+.drawer.active {
+    right: 0; /* 滑入畫面 */
+}
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+.drawer-links { list-style: none; padding: 0; }
+.drawer-links li { margin: 20px 0; }
+.drawer-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: 0.3s;
+}
+.drawer-links a:hover { color: #f39c12; }
+/* 遮罩層 */
+.overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+}
+.overlay.active { display: block; }
+/* --- 響應式切換 --- */
+@media (max-width: 900px) {
+    .navbar .nav-links { display: none; } /* 隱藏原本橫向選單 */
+    .menu-btn { display: flex; } /* 顯示漢堡按鈕 */
 }
 /* 導航欄 */
 /* Hero Section (首頁大灰欄) */
@@ -104,94 +179,6 @@ body {
 .hero p {
     font-size: 1.3rem;
     margin-bottom: 30px;
-}
-/* 漢堡按鈕樣式 */
-.menu-btn {
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 25px;
-    height: 18px;
-    z-index: 1001;
-    margin-left: 20px;
-}
-.menu-btn .bar {
-    height: 3px;
-    width: 100%;
-    background-color: white; /* 配合你的導航欄字體顏色 */
-    border-radius: 2px;
-    transition: 0.3s;
-}
-/* 抽屜本體 */
-.drawer {
-    position: fixed;
-    top: 0;
-    right: -300px; /* 藏右邊 */
-    width: 300px;
-    height: 100%;
-    background-color: #c9dcf0; /* 背景 */
-    box-shadow: -5px 0 15px rgba(0,0,0,0.3);
-    z-index: 2000;
-    transition: 0.4s ease; /* 滑動速度 */
-    padding: 20px;
-}
-.drawer.active {
-    right: 0; /* 滑入畫面 */
-}
-/* 抽屜標題與關閉按鈕 */
-.drawer-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    font-size: 1.2rem;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 15px;
-    margin-bottom: 20px;
-}
-.close-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 2rem;
-    cursor: pointer;
-}
-/* 抽屜內的連結 */
-.drawer-links {
-    list-style: none;
-    padding: 0;
-}
-.drawer-links li {
-    margin-bottom: 15px;
-}
-.drawer-links a {
-    color: #ecf0f1;
-    text-decoration: none;
-    font-size: 1.1rem;
-    display: block;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background 0.2s;
-}
-.drawer-links a:hover {
-    background-color: rgba(255,255,255,0.1);
-}
-/* 遮罩層 */
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: none; /* 預設隱藏 */
-    z-index: 1999;
-    backdrop-filter: blur(3px); /* 磨砂效果 */
-}
-
-.overlay.active {
-    display: block;
 }
 /* Hero Section (首頁大灰欄) */
 .btn {

@@ -27,6 +27,21 @@ document.addEventListener('click', (e) => { // 確認點擊函式
         loadPage(url); // 執行自定義載入函式
     }
 });
+function toggleDrawer() {
+    const drawer = document.getElementById('sideDrawer');
+    const overlay = document.getElementById('drawerOverlay');
+    
+    // 同時切換 drawer 和 overlay 的 active 類名
+    drawer.classList.toggle('active');
+    overlay.classList.toggle('active');
+
+    // 開啟時禁止頁面捲動，關閉時恢復
+    if (drawer.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = 'auto';
+    }
+}
 function loadPage(url) { // 自定義網頁載入函式
     fetch(url)
         .then(response => response.text())
@@ -239,20 +254,6 @@ function reInitPageScripts() {
         antimonyCard.addEventListener('mouseenter', () => {
             console.log("提示：你知道銻丸曾被重複使用了幾代人嗎？");
         });
-    }
-}
-function toggleDrawer() {
-    const drawer = document.getElementById('sideDrawer');
-    const overlay = document.getElementById('drawerOverlay');
-    
-    drawer.classList.toggle('active');
-    overlay.classList.toggle('active');
-
-    // 防止抽屜開啟時背景還能捲動
-    if (drawer.classList.contains('active')) {
-        document.body.style.overflow = 'hidden';
-    } else {
-        document.body.style.overflow = 'auto';
     }
 }
 document.addEventListener('DOMContentLoaded', () => {
