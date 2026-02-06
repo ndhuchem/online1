@@ -89,7 +89,7 @@ body {
 .navbar .nav-links a:hover { color: #f39c12; }
 /* --- 漢堡按鈕樣式 --- */
 .menu-btn {
-    display: none; 
+    display: flex; 
     flex-direction: column;
     justify-content: space-between;
     width: 28px;
@@ -149,6 +149,15 @@ body {
     transition: 0.3s;
 }
 .drawer-links a:hover { color: #f39c12; }
+.drawer-section-title {
+    color: #f39c12; /* 橘色亮點 */
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
 /* 遮罩層 */
 .overlay {
     position: fixed;
