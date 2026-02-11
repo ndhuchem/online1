@@ -221,6 +221,20 @@ body {
 .btn:hover {
     background: #e67e22; /* 深橘色 */
 }
+/*首頁標題*/
+.main-title {
+    font-size: 2.5rem;
+}
+.inline-link {
+    font-size: 1rem;      
+    font-weight: normal;  
+    margin-left: 10px;
+    vertical-align: middle;
+}
+.sub-link:hover {
+    padding-left: 5px; /*文字會稍微動一下 */
+}
+/*首頁標題*/
 /* 分類卡片網格 */
 .category-grid {
     display: grid;
