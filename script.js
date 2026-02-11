@@ -51,18 +51,19 @@ function loadPage(url) { // 自定義網頁載入函式
             const currentMain = document.getElementById('main-content');
             const heroHeader = document.querySelector('.hero'); // 抓取首頁大標頭
             if (newMain && currentMain) {
-                // 處理 Header首頁顯示分頁隱藏
-                // 增加對 /online1/index.html 的判斷
                 if (url.includes('index.html') || url.endsWith('/') || url.endsWith('online1/')) {
                     if (heroHeader) heroHeader.style.display = 'block';
                 } else {
                     if (heroHeader) heroHeader.style.display = 'none';
                 }
-                currentMain.className = newMain.className; // 替換main內容
+                currentMain.className = newMain.className; 
                 currentMain.innerHTML = newMain.innerHTML;
-                history.pushState({ path: url }, '', url); // 更新URL與標題
+                history.pushState({ path: url }, '', url); 
                 document.title = doc.title;
-                setTimeout(reInitPageScripts, 50); // 延遲執行腳本初始化(預留載入時間50ms)
+                if (typeof injectNavbar === "function") {
+                    injectNavbar(); 
+                }
+                setTimeout(reInitPageScripts, 50); 
                 window.scrollTo(0, 0);
             }
         })
@@ -70,6 +71,8 @@ function loadPage(url) { // 自定義網頁載入函式
             console.error("載入失敗:", err);
             window.location.href = url; // 失敗時的保險機制
         });
+        
+    // 這裡原本有 await 的地方已經刪除，因為它們會導致紅線報錯且邏輯重複
 }
 function initPeriodicTable() { // 週期表生成函式
     const container = document.querySelector('.periodic-table-container');
