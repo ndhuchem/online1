@@ -328,6 +328,17 @@ body {
 .card .btn-small:hover {
     background: #2980b9; /* 深淺藍色 */
 }
+.card-meta-box {
+    display: flex;
+    justify-content: space-between; /*一個推向左，一個推向右 */
+    padding: 0 20px 10px; 
+    margin-top: -10px;   
+}
+.meta-author, .meta-date {
+    font-size: 0.8rem;    /* 縮小字體 */
+    color: rgba(102, 102, 102, 0.6); 
+    white-space: nowrap;
+}
 /* 分類卡片網格 */
 /* 頁腳 */
 .footer {
