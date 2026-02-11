@@ -239,32 +239,43 @@ body {
     background: #e67e22; /* 深橘色 */
 }
 /*首頁標題*/
-.section-title-area {
-    max-width: 1400px;
-    padding: 0 20px;
-}
 .main-title {
     font-size: 2.2rem;
     color: #2c3e50;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     display: flex;
-    align-items: baseline;
-    flex-wrap: wrap; /* 避免手機擠成一團 */
-    gap: 15px;
+    align-items: center; 
+    flex-wrap: nowrap;   /* 強制不換行 */
+    gap: 20px;           
+    white-space: nowrap;
 }
-.inline-link {
-    font-size: 0.9rem;
+.inline-link.btn-more {
+    font-size: 0.85rem;
     color: #3498db;
     text-decoration: none;
-    font-weight: normal;
+    font-weight: bold;
+    border: 1.5px solid #3498db;
+    padding: 5px 15px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
 }
-.inline-link:hover {
-    color: #f39c12;
+.inline-link.btn-more:hover {
+    background: #3498db;
+    color: white;
+    transform: translateY(-2px); /*向上微跳動*/
 }
-.subtitle {
-    font-size: 1.1rem;
+.subtitle-inline {
+    font-size: 1rem;
     color: #7f8c8d;
-    margin-bottom: 25px;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+}
+@media (max-width: 1100px) {
+    .main-title {
+        flex-wrap: wrap;
+        white-space: normal;
+    }
 }
 .recent-tag {
     font-size: 1.8rem;
@@ -273,9 +284,6 @@ body {
     display: inline-block;
     padding-bottom: 5px;
     margin-bottom: 30px;
-}
-.sub-link:hover {
-    padding-left: 5px; /*文字會稍微動一下 */
 }
 /*首頁標題*/
 /* 分類卡片網格 */
