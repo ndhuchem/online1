@@ -116,6 +116,7 @@ body {
 .drawer {
     position: fixed; /* 固定在視窗上 */
     top: 0;
+    justify-content: space-between;
     right: -320px; /* 初始位置在畫面外 */
     width: 300px;
     height: 100vh; /* 撐滿全高 */
