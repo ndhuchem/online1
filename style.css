@@ -222,14 +222,40 @@ body {
     background: #e67e22; /* 深橘色 */
 }
 /*首頁標題*/
+.section-title-area {
+    max-width: 1400px;
+    padding: 0 20px;
+}
 .main-title {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap; /* 避免手機擠成一團 */
+    gap: 15px;
 }
 .inline-link {
-    font-size: 1rem;      
-    font-weight: normal;  
-    margin-left: 10px;
-    vertical-align: middle;
+    font-size: 0.9rem;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: normal;
+}
+.inline-link:hover {
+    color: #f39c12;
+}
+.subtitle {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin-bottom: 25px;
+}
+.recent-tag {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    border-bottom: 3px solid #f39c12; 
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-bottom: 30px;
 }
 .sub-link:hover {
     padding-left: 5px; /*文字會稍微動一下 */
