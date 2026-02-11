@@ -98,7 +98,6 @@ body {
 .menu-btn {
     display: flex; 
     flex-direction: column;
-    justify-content: space-between;
     width: 28px;
     height: 20px;
     cursor: pointer;
