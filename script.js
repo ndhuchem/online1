@@ -72,6 +72,44 @@ function loadPage(url) { // 自定義網頁載入函式
             window.location.href = url; // 失敗時的保險機制
         });
 }
+function loadCategoryPreview(containerId, targetUrl) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    fetch(targetUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('網頁載入失敗');
+            return response.text();
+        })
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const allCards = doc.querySelectorAll('.category-grid .card');
+            container.innerHTML = '';
+            allCards.forEach((card, index) => {
+                if (index < 4) {
+                    const newCard = card.cloneNode(true);
+                    container.appendChild(newCard);
+                }
+            });
+        })
+        .catch(err => {
+            console.error(`${containerId} 抓取失敗:`, err);
+            container.innerHTML = '<p>暫時無法載入內容</p>';
+        });
+}
+function initAllPreviews() {
+    const categories = [
+        { id: 'cat-1', url: '/online1/card/article-life.html' },
+        { id: 'cat-2', url: '/online1/card/article-mygo.html' },
+        { id: 'cat-3', url: '/online1/card/article-eat.html' },
+        { id: 'cat-4', url: '/online1/card/article-product.html' },
+        { id: 'cat-5', url: '/online1/card/article-cochur.html' }
+    ];
+    categories.forEach(cat => {
+        loadCategoryPreview(cat.id, cat.url);
+    });
+}
+document.addEventListener('DOMContentLoaded', initAllPreviews);
 function initPeriodicTable() { // 週期表生成函式
     const container = document.querySelector('.periodic-table-container');
     const table = document.getElementById('periodicTable');
