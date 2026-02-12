@@ -71,8 +71,6 @@ function loadPage(url) { // 自定義網頁載入函式
             console.error("載入失敗:", err);
             window.location.href = url; // 失敗時的保險機制
         });
-        
-    // 這裡原本有 await 的地方已經刪除，因為它們會導致紅線報錯且邏輯重複
 }
 function initPeriodicTable() { // 週期表生成函式
     const container = document.querySelector('.periodic-table-container');
