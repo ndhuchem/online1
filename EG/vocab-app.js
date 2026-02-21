@@ -1,11 +1,11 @@
 function renderVocab() {
-    const container = document.getElementById('main-content');
+    const container = document.getElementById('vocab-list-area'); 
     if (!container) return;
-
-    let html = `
-        <h1 class="page-title">化學專業單字庫</h1>
-        <div class="vocab-grid">
-    `;
+    if (typeof chemistryVocab === 'undefined') {
+        console.error("找不到 chemistryVocab 資料，請檢查 dictionary.js 是否載入成功");
+        return;
+    }
+    let html = `<div class="vocab-grid">`;
     chemistryVocab.forEach(item => {
         html += `
             <div class="vocab-card">
@@ -22,9 +22,12 @@ function renderVocab() {
     html += `</div>`;
     container.innerHTML = html;
 }
-// 播放音檔函式
 function playVocab(audioPath) {
     const audio = new Audio(audioPath);
-    audio.play().catch(e => console.log("音檔載入失敗"));
+    audio.play().catch(e => console.log("音檔播放失敗，請檢查路徑:", audioPath));
 }
-document.addEventListener('DOMContentLoaded', renderVocab);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderVocab);
+} else {
+    renderVocab();
+}

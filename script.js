@@ -66,6 +66,14 @@ function loadPage(url) { // 自定義網頁載入函式
                 setTimeout(reInitPageScripts, 50); 
                 window.scrollTo(0, 0);
             }
+            if (url.includes('englishlobby')) {
+                // 給瀏覽器一點點時間渲染 HTML 結構後再填入單字
+                setTimeout(() => {
+                    if (typeof renderVocab === "function") {
+                        renderVocab();
+                    }
+                }, 100);
+            }
         })
         .catch(err => {
             console.error("載入失敗:", err);
