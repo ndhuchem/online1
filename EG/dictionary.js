@@ -10,8 +10,8 @@ const chemistryVocab = [
         word: "Molecule",
         translation: "分子",
         subtitle: "A group of atoms bonded together.",
-        audio: "/online1/audio/molecule.mp3",
-        link: "/online1/vocab/molecule.html"
+        audio: "/online1/EG/audio/molecule.mp3",
+        link: "/online1/EG/vocab/molecule.html"
     },
     {
         word: "Catalyst",
